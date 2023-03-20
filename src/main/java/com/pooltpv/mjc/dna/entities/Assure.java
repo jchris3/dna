@@ -39,12 +39,8 @@ public class Assure {
     @Column(name = "DATE_NAISSANCE")
     @JsonFormat(pattern="dd-MM-yyyy")
     private String dateNaissance;
-
-<<<<<<< HEAD
     @Column(name = "code_type_piece")
     private String codeTypePiece;
-=======
->>>>>>> a9a3409530c57731f62d83d3161ef4bf0db0294f
     @Column(name = "num_contribuable")
     private String numContribuable;
 
