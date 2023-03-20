@@ -2,7 +2,10 @@ HELP.md
 target/
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
+<<<<<<< HEAD
 .mvn/
+=======
+>>>>>>> a9a3409530c57731f62d83d3161ef4bf0db0294f
 !**/src/test/**/target/
 
 ### STS ###

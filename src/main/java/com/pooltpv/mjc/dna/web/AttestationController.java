@@ -54,7 +54,7 @@ public class AttestationController {
                 //codeAssureurs.forEach(codeAssureur-> {
                     try {
                         String filename = "attestation_"+codeAssureur+"_"+ LocalDate.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy"))+".txt";
-                        response.addHeader("Content-Disposition", "attachment; filename="+filename);
+                       response.addHeader("Content-Disposition", "attachment; filename="+filename);
                         attestationService.writeAttestationCsv(attestationService.listAttestationDtos(codeCompagnie, codeAssureur,startDate,endDate),response.getWriter());
                     } catch (AttestationDtoException e) {
                         e.printStackTrace();

@@ -20,7 +20,11 @@ public class CSVHelper {
     private static DateFormatter dateFormatter = new DateFormatter();
 
     public static ByteArrayInputStream assuresToCSV(List<AssureDTO> assureDTOList) {
+<<<<<<< HEAD
         final CSVFormat format = CSVFormat.TDF.withDelimiter(';').withQuoteMode(QuoteMode.MINIMAL).withHeader("code_assure", "code_assureur", "qualite"
+=======
+        final CSVFormat format = CSVFormat.TDF.withDelimiter('\t').withQuoteMode(QuoteMode.MINIMAL).withHeader("code_assure", "code_assureur", "qualite"
+>>>>>>> a9a3409530c57731f62d83d3161ef4bf0db0294f
                 ,"nom","prenom","profession","date_naissance","num_contribuable","ville",
                 "rue","boite_postale","telephone","email","numero_permis","categorie_permis","date_delivrance",
                 "permis_delivre_par","nom_prenom_conducteur","date_naissance_conducteur");
@@ -32,6 +36,7 @@ public class CSVHelper {
              CSVPrinter csvPrinter = new CSVPrinter(new PrintWriter(out), format);) {
 
             for (AssureDTO assureDTO : assureDTOList) {
+<<<<<<< HEAD
 
                 if(assureDTOList!=null) {
                     if(assureDTO.getCodeTypePiece()==null){
@@ -48,6 +53,14 @@ public class CSVHelper {
                             assureDTO.getVille(), assureDTO.getRue(), assureDTO.getBoitePostal(), assureDTO.getTelephone(), assureDTO.getEmail(),
                             assureDTO.getNumeroPermis(), assureDTO.getCategoriePermis(), formatter1.format(dateNonNull(assureDTO.getDateDelivrance())), assureDTO.getPermisDelivrePar(),
                             assureDTO.getNomPrenomConducteur(), formatter1.format(dateNonNull(assureDTO.getDateNaissanceConducteur())));
+=======
+                if(assureDTOList!=null) {
+                    csvPrinter.printRecord(assureDTO.getCodeAssure(), assureDTO.getCodeAssureur(), assureDTO.getQualite(), assureDTO.getNom()
+                            , assureDTO.getPrenom(), assureDTO.getProfession(), formatter1.format(assureDTO.getDateNaissance()), assureDTO.getNumContribuable(),
+                            assureDTO.getVille(), assureDTO.getRue(), assureDTO.getBoitePostal(), assureDTO.getTelephone(), assureDTO.getEmail(),
+                            assureDTO.getNumeroPermis(), assureDTO.getCategoriePermis(), formatter1.format(assureDTO.getDateDelivrance()), assureDTO.getPermisDelivrePar(),
+                            assureDTO.getNomPrenomConducteur(), formatter1.format(assureDTO.getDateNaissanceConducteur()));
+>>>>>>> a9a3409530c57731f62d83d3161ef4bf0db0294f
                 }
                 else{
                     csvPrinter.printRecord(assureDTOList);
@@ -100,7 +113,11 @@ public class CSVHelper {
     }
 
     public static ByteArrayInputStream vehiculesToCSV(List<VehiculeDTO> vehiculeDTOS) throws IOException, ParseException {
+<<<<<<< HEAD
         final CSVFormat format = CSVFormat.DEFAULT.withDelimiter(';').withQuoteMode(QuoteMode.MINIMAL).withHeader("code_assure", "code_assureur", "marque"
+=======
+        final CSVFormat format = CSVFormat.DEFAULT.withQuoteMode(QuoteMode.MINIMAL).withHeader("code_assure", "code_assureur", "marque"
+>>>>>>> a9a3409530c57731f62d83d3161ef4bf0db0294f
                 ,"modele","date_premiere_mise_circulation","immatriculation","chassis","usage","charge_utile",
                 "puissance_fiscale","remorque","nombre_portes","immatriculation_remorque","source_energie","nombre_de_places","cylindree","double_commande",
                 "reponsabilite_civile","utilitaire","type_engin","poids_total_autorise_en_charge");
@@ -202,6 +219,7 @@ public class CSVHelper {
             throw new RuntimeException("fail to import data to CSV file: " + e.getMessage());
         }
     }
+<<<<<<< HEAD
 
     public static ByteArrayInputStream venteToCSV(List<VenteDTO> venteDTOS) throws IOException, ParseException {
         final CSVFormat format = CSVFormat.TDF.withQuoteMode(QuoteMode.MINIMAL).withDelimiter(';').withHeader("numero_attestation"
@@ -240,4 +258,6 @@ public class CSVHelper {
         }
         return date;
     }
+=======
+>>>>>>> a9a3409530c57731f62d83d3161ef4bf0db0294f
 }

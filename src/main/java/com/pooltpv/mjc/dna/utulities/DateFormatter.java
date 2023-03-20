@@ -16,7 +16,10 @@ public class DateFormatter {
 
    private DateFormat dateHhMmSsFormatter = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
    private DateFormat dateFormatter = new SimpleDateFormat("dd-MM-yyyy");
+<<<<<<< HEAD
    private DateFormat dateFormatter1 = new SimpleDateFormat("dd/MM/yyyy");
+=======
+>>>>>>> a9a3409530c57731f62d83d3161ef4bf0db0294f
 
    public String setDateFormat(String dateHhMmSs) throws ParseException {
       if(dateHhMmSs!=null)
@@ -32,6 +35,7 @@ public class DateFormatter {
          return "";
 
    }
+<<<<<<< HEAD
 
    public String setDateFormatSimple1(Date date) throws ParseException {
       if(date!=null)
@@ -40,4 +44,6 @@ public class DateFormatter {
          return "";
 
    }
+=======
+>>>>>>> a9a3409530c57731f62d83d3161ef4bf0db0294f
 }

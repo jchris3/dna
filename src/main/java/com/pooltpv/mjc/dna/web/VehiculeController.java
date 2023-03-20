@@ -56,7 +56,7 @@ public class VehiculeController {
                 //codeAssureurs.forEach(codeAssureur-> {
                     try {
                         String filename = "vehicule_"+codeAssureur+"_"+ LocalDate.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy"))+".txt";
-                        InputStreamResource file = new InputStreamResource(vehiculeService.load(vehiculeService.listVehiculeDTO(codeCompagnie, codeAssureur, startDate, endDate)));
+                       InputStreamResource file = new InputStreamResource(vehiculeService.load(vehiculeService.listVehiculeDTO(codeCompagnie, codeAssureur, startDate, endDate)));
 
                         return ResponseEntity.ok()
                                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + filename)
