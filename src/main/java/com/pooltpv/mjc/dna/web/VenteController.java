@@ -1,13 +1,16 @@
 package com.pooltpv.mjc.dna.web;
 
-import com.pooltpv.mjc.dna.exceptions.AttestationDtoException;
 import com.pooltpv.mjc.dna.exceptions.DateDiffException;
 import com.pooltpv.mjc.dna.exceptions.VehiculeDtoException;
-import com.pooltpv.mjc.dna.service.AttestationService;
-import com.pooltpv.mjc.dna.service.VehiculeService;
+import com.pooltpv.mjc.dna.service.VenteDnaService;
+import com.pooltpv.mjc.dna.service.VenteService;
 import com.pooltpv.mjc.dna.utulities.DateValidatorUsingDateTimeFormatter;
 import lombok.NonNull;
+import org.springframework.core.io.InputStreamResource;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -22,21 +25,18 @@ import java.util.*;
 
 @RestController
 @RequestMapping("/csv")
-public class AttestationController {
+public class VenteController {
 
-    private AttestationService attestationService;
-    private List<Integer> codeAssureurs = new ArrayList<>(Arrays.asList(101,102,103,104,105,106,107,108,109,
-                                     110,112,113,114,115,116,117));
-
-    public AttestationController(AttestationService attestationService) {
-        this.attestationService = attestationService;
+    private VenteService venteService;
+    public VenteController(VenteService venteService) {
+        this.venteService = venteService;
     }
-    @RequestMapping(path = "/attestations/{codeCompagnie}/{codeAssureur}/{dateDebut}/{dateFin}")
-    public void getAllVehiculeInCsv(@PathVariable(name = "codeCompagnie") @NonNull int codeCompagnie,
-                                    @PathVariable(name = "codeAssureur") @NonNull int codeAssureur,
-                                     @PathVariable(name = "dateDebut") @DateTimeFormat(pattern = "dd-MM-yyyy") String  dateDebut,
-                                     @PathVariable(name = "dateFin")  @DateTimeFormat(pattern = "dd-MM-yyyy") String  dateFin,
-                                     HttpServletResponse response) throws Exception {
+    @RequestMapping(path = "/ventes/{codeCompagnie}/{codeAssureur}/{dateDebut}/{dateFin}")
+    public ResponseEntity<InputStreamResource> getAllVenteCsv(@PathVariable(name = "codeCompagnie") @NonNull int codeCompagnie,
+                                                                   @PathVariable(name = "codeAssureur") @NonNull int codeAssureur,
+                                                                   @PathVariable(name = "dateDebut") @DateTimeFormat(pattern = "dd-MM-yyyy") String  dateDebut,
+                                                                   @PathVariable(name = "dateFin")  @DateTimeFormat(pattern = "dd-MM-yyyy") String  dateFin,
+                                                                   HttpServletResponse response) throws Exception {
         response.setContentType("text/csv");
 
         try {
@@ -53,10 +53,14 @@ public class AttestationController {
             if (dateValidatorUsingDateTimeFormatter.isDatediffValid(startDate, endDate) == true)
                 //codeAssureurs.forEach(codeAssureur-> {
                     try {
-                        String filename = "attestation_"+codeAssureur+"_"+ LocalDate.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy"))+".txt";
-                        response.addHeader("Content-Disposition", "attachment; filename="+filename);
-                        attestationService.writeAttestationCsv(attestationService.listAttestationDtos(codeCompagnie, codeAssureur,startDate,endDate),response.getWriter());
-                    } catch (AttestationDtoException e) {
+                        String filename = "vente_"+codeAssureur+"_"+ LocalDate.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy"))+".txt";
+                        InputStreamResource file = new InputStreamResource(venteService.load(venteService.listVenteDTO(codeCompagnie,codeAssureur,startDate, endDate)));
+
+                        return ResponseEntity.ok()
+                                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + filename)
+                                .contentType(MediaType.parseMediaType("application/csv"))
+                                .body(file);
+                    } catch (VehiculeDtoException e) {
                         e.printStackTrace();
                     } catch (IOException e) {
                         e.printStackTrace();
@@ -68,5 +72,6 @@ public class AttestationController {
 
             throw new DateDiffException(e.getMessage());
         }
+        return null;
     }
 }

@@ -40,6 +40,8 @@ public class Assure {
     @JsonFormat(pattern="dd-MM-yyyy")
     private String dateNaissance;
 
+    @Column(name = "code_type_piece")
+    private String codeTypePiece;
     @Column(name = "num_contribuable")
     private String numContribuable;
 

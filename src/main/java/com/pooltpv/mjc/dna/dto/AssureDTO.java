@@ -24,6 +24,7 @@ public class AssureDTO {
     private String profession;
     @JsonFormat(pattern="dd-MM-yyyy")
     private Date dateNaissance;
+    private String codeTypePiece;
     private String numContribuable;
     private String ville;
     private String rue;

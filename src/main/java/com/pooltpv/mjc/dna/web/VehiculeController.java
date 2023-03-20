@@ -55,7 +55,7 @@ public class VehiculeController {
             if (dateValidatorUsingDateTimeFormatter.isDatediffValid(startDate, endDate) == true)
                 //codeAssureurs.forEach(codeAssureur-> {
                     try {
-                        String filename = "vehicule-"+codeAssureur+"_"+ LocalDate.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy"))+".txt";
+                        String filename = "vehicule_"+codeAssureur+"_"+ LocalDate.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy"))+".txt";
                         InputStreamResource file = new InputStreamResource(vehiculeService.load(vehiculeService.listVehiculeDTO(codeCompagnie, codeAssureur, startDate, endDate)));
 
                         return ResponseEntity.ok()

@@ -48,14 +48,16 @@ public class AttestationServiceImpl implements AttestationService {
 
     @Override
     public void writeAttestationCsv(List<AttestationDto> attestationDtos, Writer writer) {
-        try (CSVPrinter csvPrinter = new CSVPrinter(writer, CSVFormat.DEFAULT.withDelimiter(',').withHeader("numero_attestation", "numero_police", "date_emission"
+        try (CSVPrinter csvPrinter = new CSVPrinter(writer, CSVFormat.DEFAULT.withDelimiter(';').withHeader("numero_attestation", "numero_police", "date_emission"
                 ,"date_effet","date_echeance","couleur","statut","zone_circulation","immatriculation",
                 "remorque","code_assure","code_assureur"))) {
             for (AttestationDto attestationDto : attestationDtos) {
-                csvPrinter.printRecord(attestationDto.getNumeroAttestation(),attestationDto.getNumeroPolice(),dateFormatter.setDateFormatSimple(attestationDto.getDateEmission())
-                        ,dateFormatter.setDateFormatSimple(attestationDto.getDateEffet()),dateFormatter.setDateFormatSimple(attestationDto.getDateEcheance())
-                        ,attestationDto.getCouleur(),attestationDto.getStatut(),attestationDto.getZoneCirculation(),attestationDto.getImmatriculation(),
-                        attestationDto.getRemorque(),attestationDto.getCodeAssure(),attestationDto.getCodeAssureur());
+                if(attestationDto.getNumeroAttestation()!=null) {
+                    csvPrinter.printRecord(attestationDto.getNumeroAttestation(), attestationDto.getNumeroPolice(), dateFormatter.setDateFormatSimple1(attestationDto.getDateEmission())
+                            , dateFormatter.setDateFormatSimple1(attestationDto.getDateEffet()), dateFormatter.setDateFormatSimple1(attestationDto.getDateEcheance())
+                            , attestationDto.getCouleur(), attestationDto.getStatut(), attestationDto.getZoneCirculation(), attestationDto.getImmatriculation(),
+                            attestationDto.getRemorque(), attestationDto.getCodeAssure(), attestationDto.getCodeAssureur());
+                }
             }
         } catch (IOException | ParseException e) {
             log.error("Error While writing CSV ", e);

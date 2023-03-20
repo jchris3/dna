@@ -20,7 +20,7 @@ public class CSVHelper {
     private static DateFormatter dateFormatter = new DateFormatter();
 
     public static ByteArrayInputStream assuresToCSV(List<AssureDTO> assureDTOList) {
-        final CSVFormat format = CSVFormat.TDF.withDelimiter('\t').withQuoteMode(QuoteMode.MINIMAL).withHeader("code_assure", "code_assureur", "qualite"
+        final CSVFormat format = CSVFormat.TDF.withDelimiter(';').withQuoteMode(QuoteMode.MINIMAL).withHeader("code_assure", "code_assureur", "qualite"
                 ,"nom","prenom","profession","date_naissance","num_contribuable","ville",
                 "rue","boite_postale","telephone","email","numero_permis","categorie_permis","date_delivrance",
                 "permis_delivre_par","nom_prenom_conducteur","date_naissance_conducteur");
@@ -32,12 +32,22 @@ public class CSVHelper {
              CSVPrinter csvPrinter = new CSVPrinter(new PrintWriter(out), format);) {
 
             for (AssureDTO assureDTO : assureDTOList) {
+
                 if(assureDTOList!=null) {
+                    if(assureDTO.getCodeTypePiece()==null){
+                        assureDTO.setNumContribuable("");
+                    } else if(assureDTO.getCodeTypePiece().equals("RC")){
+                        assureDTO.setNumContribuable(assureDTO.getNumContribuable());
+                    }else if(assureDTO.getCodeTypePiece().equals("IF")){
+                        assureDTO.setNumContribuable(assureDTO.getNumContribuable());
+                    } else{
+                        assureDTO.setNumContribuable("");
+                    }
                     csvPrinter.printRecord(assureDTO.getCodeAssure(), assureDTO.getCodeAssureur(), assureDTO.getQualite(), assureDTO.getNom()
-                            , assureDTO.getPrenom(), assureDTO.getProfession(), formatter1.format(assureDTO.getDateNaissance()), assureDTO.getNumContribuable(),
+                            , assureDTO.getPrenom(), assureDTO.getProfession(), formatter1.format(dateNonNull(assureDTO.getDateNaissance())), assureDTO.getNumContribuable(),
                             assureDTO.getVille(), assureDTO.getRue(), assureDTO.getBoitePostal(), assureDTO.getTelephone(), assureDTO.getEmail(),
-                            assureDTO.getNumeroPermis(), assureDTO.getCategoriePermis(), formatter1.format(assureDTO.getDateDelivrance()), assureDTO.getPermisDelivrePar(),
-                            assureDTO.getNomPrenomConducteur(), formatter1.format(assureDTO.getDateNaissanceConducteur()));
+                            assureDTO.getNumeroPermis(), assureDTO.getCategoriePermis(), formatter1.format(dateNonNull(assureDTO.getDateDelivrance())), assureDTO.getPermisDelivrePar(),
+                            assureDTO.getNomPrenomConducteur(), formatter1.format(dateNonNull(assureDTO.getDateNaissanceConducteur())));
                 }
                 else{
                     csvPrinter.printRecord(assureDTOList);
@@ -90,7 +100,7 @@ public class CSVHelper {
     }
 
     public static ByteArrayInputStream vehiculesToCSV(List<VehiculeDTO> vehiculeDTOS) throws IOException, ParseException {
-        final CSVFormat format = CSVFormat.DEFAULT.withQuoteMode(QuoteMode.MINIMAL).withHeader("code_assure", "code_assureur", "marque"
+        final CSVFormat format = CSVFormat.DEFAULT.withDelimiter(';').withQuoteMode(QuoteMode.MINIMAL).withHeader("code_assure", "code_assureur", "marque"
                 ,"modele","date_premiere_mise_circulation","immatriculation","chassis","usage","charge_utile",
                 "puissance_fiscale","remorque","nombre_portes","immatriculation_remorque","source_energie","nombre_de_places","cylindree","double_commande",
                 "reponsabilite_civile","utilitaire","type_engin","poids_total_autorise_en_charge");
@@ -191,5 +201,43 @@ public class CSVHelper {
         } catch (IOException e) {
             throw new RuntimeException("fail to import data to CSV file: " + e.getMessage());
         }
+    }
+
+    public static ByteArrayInputStream venteToCSV(List<VenteDTO> venteDTOS) throws IOException, ParseException {
+        final CSVFormat format = CSVFormat.TDF.withQuoteMode(QuoteMode.MINIMAL).withDelimiter(';').withHeader("numero_attestation"
+                ,"immatriculation","code_assure","code_assureur","code_intermediaire_dna",
+                "prime_nette_rc","dta");
+
+        DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        DateFormat formatter1 = new SimpleDateFormat("dd/MM/yyyy");
+
+        try (ByteArrayOutputStream out = new ByteArrayOutputStream();
+             CSVPrinter csvPrinter = new CSVPrinter(new PrintWriter(out), format);) {
+
+            for (VenteDTO venteDTO : venteDTOS) {
+
+                if(venteDTO.getNumeroAttestation()!=null)
+                    csvPrinter.printRecord(venteDTO.getNumeroAttestation()
+                            ,venteDTO.getImmatriculation()
+                            ,venteDTO.getCodeAssure()
+                            ,venteDTO.getCodeAssureur()
+                            ,venteDTO.getCodeIntermediaireDna()
+                            ,venteDTO.getPrimeNetteRC()
+                            ,venteDTO.getDta());
+            }
+
+            csvPrinter.flush();
+            return new ByteArrayInputStream(out.toByteArray());
+
+        } catch (IOException e) {
+            throw new RuntimeException("fail to import data to CSV file: " + e.getMessage());
+        }
+    }
+
+    public static Date dateNonNull(Date date){
+        if(date==null){
+            return new Date();
+        }
+        return date;
     }
 }
